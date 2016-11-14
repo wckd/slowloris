@@ -4,9 +4,10 @@ setup(
     py_modules = ["slowloris"],
     entry_points = {"console_scripts": ["slowloris=slowloris:main"]},
     version = "0.1.3",
-    description = "Low bandwidth DoS tool. Slowloris rewrite in Python.",
+    description = "Slowloris rewrite in Python. With SOCKS support",
     author = "Gokberk Yaltirakli",
     author_email = "webdosusb@gmail.com",
-    url = "https://github.com/gkbrk/slowloris",
-    keywords = ["dos", "http", "slowloris"]
+    url = "https://github.com/wckd/slowloris",
+    keywords = ["dos", "http", "slowloris"],
+    install_requires=["PySocks"]
 )

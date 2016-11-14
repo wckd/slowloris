@@ -1,4 +1,10 @@
-import socket, random, time, sys, argparse, random
+import socket
+import random
+import time
+import sys
+import argparse
+import random
+import socks
 
 parser = argparse.ArgumentParser(description="Slowloris, low bandwidth stress test tool for websites")
 parser.add_argument('host',  nargs="?", help="Host to preform stress test on")
@@ -6,8 +12,10 @@ parser.add_argument('-p', '--port', default=80, help="Port of webserver, usually
 parser.add_argument('-s', '--sockets', default=150, help="Number of sockets to use in the test", type=int)
 parser.add_argument('-v', '--verbose', dest="verbose", action="store_true", help="Increases logging")
 parser.add_argument('-ua', '--randuseragents', dest="randuseragent", action="store_true", help="Randomizes user-agents with each request")
+parser.add_argument('-t', '--tor', dest="tor", action="store_true", help="Send over tor (socks)")
 parser.set_defaults(verbose=False)
 parser.set_defaults(randuseragent=False)
+parser.set_defaults(tor=False)
 args = parser.parse_args()
 
 if len(sys.argv)<=1:
@@ -57,7 +65,11 @@ user_agents = [
 ]
 
 def init_socket(ip):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    if args.tor:
+        s = socks.socksocket()
+        s.set_proxy(socks.SOCKS5, "localhost", 9050)
+    else:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(4)
     s.connect((ip,args.port))
 
